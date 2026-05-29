@@ -7,6 +7,7 @@ async work without blocking API responses.
 <p align="center">
   <img src="demo.gif" width="900">
 </p>
+
 ## What It Does
 
 When a client sends a job via HTTP, the producer pushes it into 
@@ -40,8 +41,8 @@ completely decoupled from the API.
     **Monitor**: Provides a live view of Pending, In-Progress, and Failed task counts.
 
 ## File Structure
-code Text
 
+```text
 DTQ/
 ├── src/
 │   ├── producer.js    # Express API (Entry Point)
@@ -51,6 +52,7 @@ DTQ/
 ├── docker-compose.yml # Infrastructure Orchestrator
 ├── package.json       # Dependencies (ioredis, axios, express)
 └── .gitignore         # Prevents pushing node_modules/env
+```
 
 ## Installation & Setup
 *Prerequisites*
@@ -71,27 +73,27 @@ docker compose up --build -d
 Scale the Workers (Optional):
 To see the system handle high load with 3 parallel workers:
 ```bash
-    docker compose up --scale worker=3 -d
+docker compose up --scale worker=3 -d
 ```
 
 ## Monitoring and Usage
  To see the system in action across multiple terminals:
   In Terminal 2, watch the Dashboard:
   ```bash
-      docker compose exec monitor node src/monitor.js
+  docker compose exec monitor node src/monitor.js
   ```
   In Terminal 3, watch the Worker (Scraping logs):
   ```bash
-      docker compose logs -f worker
+  docker compose logs -f worker
   ```
   In Terminal 4, send a task using curl:
 ```bash
-for i in {1..10}; do    
-                        curl -X POST http://localhost:3000/job \
-                             -H "Content-Type: application/json" \
-                             -d '{"task": {"url": "https://google.com"}}';   
-                        sleep 0.1; 
-                    done
+for i in {1..10}; do 
+  curl -X POST http://localhost:3000/job \
+       -H "Content-Type: application/json" \
+       -d '{"task": {"url": "https://google.com"}}'
+  sleep 0.1
+done
 ```
 Watch the Monitor terminal to see the job move from Pending → Active → Completed.
 
