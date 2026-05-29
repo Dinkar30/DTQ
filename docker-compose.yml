@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # 1. The Redis Database
+  redis-db:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  # 2. The Producer (API)
+  producer:
+    build: .
+    command: node src/producer.js
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis-db
+    depends_on:
+      - redis-db
+
+  # 3. The Worker
+  worker:
+    build: .
+    command: node src/worker.js
+    environment:
+      - REDIS_HOST=redis-db
+    depends_on:
+      - redis-db
+
+  # 4. The Monitor Dashboard
+  monitor:
+    build: .
+    command: node src/monitor.js
+    environment:
+      - REDIS_HOST=redis-db
+    tty: true # This allows console.clear() to work inside Docker
+    depends_on:
+      - redis-db
