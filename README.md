@@ -97,5 +97,6 @@ done
 ```
 Watch the Monitor terminal to see the job move from Pending → Active → Completed.
 
-Author: Dinkar Pathak
+Author: Dinkar Pathak 
+
 **Tech Stack**: Node.js, Redis, Docker, Express, Axios.
